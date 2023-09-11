@@ -1,0 +1,22 @@
+---
+import MainLayout from "../layouts/MainLayout.astro";
+import ArrowLeft from "../images/arrow_left.svg";
+import PostAdder from "../components/PostAdder.tsx";
+import { Image } from "astro:assets";
+---
+
+<style>
+    textarea {
+        resize: none;
+        overflow-y: hidden;
+    }
+</style>
+<MainLayout title="Добавление поста">
+    <a href="/scroll" class="flex flex-row gap-[10px] mt-[30px] ml-5">
+        <Image src={ArrowLeft} alt={"Стрелка вернуться"} />
+        <span class="font-normal text-[17px] text-text_description"
+            >Вернуться к Ленте</span
+        >
+    </a>
+    <PostAdder client:load />
+</MainLayout>

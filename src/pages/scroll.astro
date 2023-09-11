@@ -1,0 +1,100 @@
+---
+import NewsCard from "../components/NewsCard.astro";
+import Tag from "../components/Tag.astro";
+import MainLayout from "../layouts/MainLayout.astro";
+import ItamHackImage from "../images/itam_hack.png";
+import LctImage from "../images/lct_square.png";
+import ScrollTags from "../components/ScrollTags";
+
+const news_tags = [
+    "Все новости",
+    "Хакатоны",
+    "Победы",
+    "Митапы",
+    "Лекции",
+    "Собрания",
+    "Проекты",
+    "Курсы",
+];
+const news_selected = 0;
+const source_tags = [
+    "Все источники",
+    "МИСИС",
+    "Хакатон–клуб",
+    "DAMN",
+    "CTF",
+    "Геймдев",
+    "Робототехника",
+    "Спортпрога",
+    "AI Knowledge Club",
+];
+const source_selected = 0;
+const news: Parameters<typeof NewsCard>[0][] = [
+    {
+        id: 0,
+        image: LctImage,
+        release_date: new Date(2023, 6, 7),
+        title: "И снова победа!",
+    },
+    {
+        id: 1,
+        image: ItamHackImage,
+        release_date: new Date(2023, 9, 7),
+        title: "А вот и детали хакатона",
+    },
+    {
+        id: 2,
+        image: ItamHackImage,
+        release_date: new Date(2023, 9, 7),
+        title: "И вот и детали хакатона",
+    },
+    {
+        id: 3,
+        image: ItamHackImage,
+        release_date: new Date(2023, 9, 7),
+        title: "Детали хакатона",
+    },
+];
+---
+
+<MainLayout title="Лента">
+    <style is:global>
+        .fancy:hover {
+            background-image: linear-gradient(
+                to right,
+                rgb(164, 112, 229),
+                rgb(106, 150, 237),
+                rgb(128, 225, 202)
+            );
+            outline: none;
+            color: white;
+            outline-color: white;
+            color: white;
+        }
+        .fancy:active {
+            background-color: rgb(164, 112, 229);
+            outline: 2px solid transparent;
+            outline-offset: 2px;
+            background-image: none;
+            color: white;
+            background-color: white;
+            color: black
+        }
+    
+        .fancy:hover.selected {
+            color: black;
+        }
+    </style>
+    <div class="flex flex-row mt-[70px]">
+        <ScrollTags client:load/>
+
+        <!-- Карточки -->
+        <div class="grid grid-cols-2 gap-5 ml-5">
+            {
+                news.map((article) => {
+                    return <NewsCard {...article} />;
+                })
+            }
+        </div>
+    </div>
+</MainLayout>

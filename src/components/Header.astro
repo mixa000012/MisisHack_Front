@@ -1,0 +1,86 @@
+---
+import { Image } from "astro:assets";
+import Button from "../layouts/Button.astro";
+import itamImage from "../images/itam.svg";
+import HeaderLoginButton from "./HeaderLoginButton";
+
+const links: [string, string][] = [
+    ["Лента", "/scroll/"],
+    ["События", "/events/"],
+    ["Команды", "/teams/"],
+    ["Клубы и курсы", "/clubs/"],
+];
+---
+
+<style is:global>
+    @tailwind utilities;
+    @layer utilities {
+        .fancy_underline {
+            position: relative;
+        }
+        
+        @keyframes fadein {
+            from {
+                background-image: linear-gradient(
+                    to right,
+                    rgba(164, 112, 229, 0),
+                    rgba(106, 150, 237, 0),
+                    rgba(128, 225, 202, 0)
+                );
+            }
+    
+            to {
+                background-image: linear-gradient(
+                    to right,
+                    rgba(164, 112, 229, 1),
+                    rgba(106, 150, 237, 1),
+                    rgba(128, 225, 202, 1)
+                );
+            }
+        }
+        .fancy_underline:hover::after {
+            animation: 100ms linear 1s fadein;
+        }
+        .fancy_underline::after {
+            content: "";
+            border-radius: 9999px;
+            background-image: linear-gradient(
+                to right,
+                rgb(164, 112, 229),
+                rgb(106, 150, 237),
+                rgb(128, 225, 202)
+            );
+            height: 0.25rem;
+            width: 100%;
+            position: absolute;
+            bottom: 0px;
+            left: 0px;
+        }
+    }
+</style>
+<header
+    class="bg-sbackground self-center w-full align-middle items-center justify-self-center text-text_main rounded-full px-5 py-3 flex flex-row"
+    transition:name="header"
+>
+    <a class="h-fit info" href="/"><Image src={itamImage} alt="ITAM Logo" /></a>
+    <div
+        class="grow flex flex-row gap-[60px] text-center justify-center text-[20px] items-center font-normal"
+    >
+        {
+            links.map(([name, href]) => {
+                return (
+                    <a
+                        href={href}
+                        class:list={[
+                            "hover:fancy_underline",
+                            { fancy_underline: Astro.url.pathname === href },
+                        ]}
+                    >
+                        {name}
+                    </a>
+                );
+            })
+        }
+    </div>
+    <HeaderLoginButton client:only/>
+</header>

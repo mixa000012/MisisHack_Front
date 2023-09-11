@@ -1,0 +1,17 @@
+---
+type Props = astroHTML.JSX.ButtonHTMLAttributes & {
+    background?: string,
+    text_class?: string
+};
+
+const { class: classs, background, text_class} = Astro.props;
+---
+
+<button id={Astro.props.id}
+    class:list={[
+        "px-6 py-2 text-center items-start gap-1 hover:text-text_main active:text-text_main hover:bg-gradient-to-r hover:from-[#A470E5] hover:via-[#6A96ED] hover:to-[#80E1CA] active:bg-bpress rounded-full active:bg-none",
+        classs,
+        text_class ?? "text-text_main2",
+        background ?? "bg-binactive"
+    ]}><slot /></button
+>

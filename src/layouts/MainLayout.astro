@@ -1,0 +1,38 @@
+---
+import { ViewTransitions } from 'astro:transitions';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+interface Props {
+    title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>{title}</title>
+        <style is:global>
+            @font-face {
+                font-family: "Gilroy";
+                src: url("/fonts/Gilroy-Regular.ttf");
+                font-weight: normal;
+                font-style: normal;
+                font-display: swap;
+            }
+
+            .gilroy {
+                font-family: Gilroy;
+            }
+        </style>
+    <ViewTransitions/>
+    </head>
+    <body class="flex max-2xl:mx-[142px] my-5 bg-background flex-col gilroy 2xl:max-w-7xl 2xl:mx-auto">
+        <Header />
+        <main><slot /></main>
+        <Footer class="mt-[70px]" />
+        </body>
+</html>

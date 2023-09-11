@@ -1,0 +1,30 @@
+---
+import vkImage from "../images/vk.svg";
+import telegramImage from "../images/telegram.svg";
+import markerImage from "../images/marker.svg";
+import { Image } from "astro:assets";
+
+interface Props {
+    class: string
+}
+
+const {class: classs} = Astro.props;
+---
+
+<footer class:list={["bg-sbackground rounded-[30px] grid grid-cols-2 p-5", classs]}>
+    <div class="flex flex-row gap-2 items-start">
+        <Image src={markerImage} alt="" class:list="object-right-top pt-1"/>
+        <span class="text-base text-text_description"
+            >Ленинский проспект, д. 6. Горный<br />институт, 5 этаж, каб.
+            Г-510</span
+        >
+    </div>
+    <div class="flex flex-row items-center">
+        <span class="text-text_main text-xl font-normal">Мы в соцсетях</span
+        >
+        <address class="ml-4 flex flex-row gap-2">
+            <a href="https://vk.com/itatmisis"><Image src={vkImage} alt="ВКонтакте" /><a/>
+            <a href="https://t.me/itatmisis"><Image src={telegramImage} alt="Телеграм" /><a/>
+        </address>
+    </div>
+</footer>

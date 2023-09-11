@@ -1,0 +1,253 @@
+---
+import { Image } from "astro:assets";
+import Button from "../layouts/Button.astro";
+import MainLayout from "../layouts/MainLayout.astro";
+import itamAltImage from "../images/itam_alt.svg";
+import Footer from "../components/Footer.astro";
+import Arrow from "../images/index_arrow.svg";
+import InfoOrEntry from "../components/InfoOrEntry.jsx";
+import lctImage from "../images/lct.png";
+import arrowRightImage from "../images/arrow-right.svg";
+import { toValidTransitionName } from "../components/NewsCard.astro";
+import { State } from "../components/InfoOrEntry.tsx";
+
+const club_cards: [
+    [string, string],
+    [string, string],
+    [string, string],
+    [string, string],
+] = [
+    ["DAMN", "Дизайн-клуб"],
+    ["Геймдев", "Неравнодушны к играм"],
+    ["CTF", "Информационная безопасность"],
+    ["А ещё", "много других объединений"],
+];
+---
+
+<style>
+    .noise {
+        background-image: url("/noise.png");
+    }
+
+    .gradient_hover:hover button {
+        background-image: linear-gradient(
+            to right,
+            rgb(164, 112, 229),
+            rgb(106, 150, 237),
+            rgb(128, 225, 202)
+        );
+        outline: none;
+    }
+
+    .gradient_hover:active button {
+        background-color: rgb(164, 112, 229);
+        outline: 2px solid transparent;
+        outline-offset: 2px;
+        background-image: none;
+    }
+</style>
+<MainLayout title="ITAM">
+    <script>
+        function hasLogin() {
+            const email = window.localStorage.getItem("email");
+            const password = window.localStorage.getItem("password");
+            const token = window.localStorage.getItem("token");
+            return email && password && token;
+        }
+
+        const login = new Event("login");
+        const register = new Event("register");
+        const info = new Event("info");
+        const infohide = new Event("infohide");
+
+        document.addEventListener("astro:page-load", () => {
+            const loginHidersButtons = document.querySelectorAll(".login-hide");
+            const registers = document.getElementById("registerInfo");
+            if (hasLogin()) {
+                loginHidersButtons.forEach(els => {
+                    els.style["pointer-events"] = "none";
+                    els.style.opacity = 0;
+                });
+                if (registers) {
+                    registers.innerText="Читать подробнее";
+                    registers.onclick = () => {
+                        window.location.replace("https://telegra.ph/Hakaton-klub-20-sbornye-04-11");
+                    }
+                }
+                return;
+            }
+            const loginButtons = document.querySelectorAll(".login");
+            const registerButtons = document.querySelectorAll(".register");
+            const infoButtons = document.querySelectorAll(".info");
+
+            const hideInfos = () => {
+                const promises = [];
+                document.querySelectorAll(".infoh").forEach((infoh) => {
+                    promises.push(
+                        new Promise((res, rej) => {
+                            infoh.animate([{ opacity: 1 }, { opacity: 0 }], {
+                                duration: 150,
+                                iterations: 1,
+                            }).onfinish = () => res();
+                        }),
+                    );
+                });
+                return Promise.all(promises);
+            };
+
+            loginButtons.forEach((but) =>
+                but.addEventListener("click", () => {
+                    hideInfos().then(() => window.dispatchEvent(login));
+                }),
+            );
+            registerButtons.forEach((but) =>
+                but.addEventListener("click", () => {
+                    hideInfos().then(() => window.dispatchEvent(register));
+                }),
+            );
+            infoButtons.forEach((infoe) => {
+                infoe.addEventListener("click", () =>
+                    window.dispatchEvent(info),
+                );
+                window.addEventListener("infoshow", () => {
+                    document.querySelectorAll(".infoh").forEach((infoh) => {
+                        infoh.animate([{ opacity: 0 }, { opacity: 1 }], {
+                            duration: 150,
+                            iterations: 1,
+                        });
+                    });
+                });
+            });
+        });
+    </script>
+    <div
+        class="grid grid-cols-2 gap-x-7 gap-y-16 text-text_main pt-14 relative"
+    >
+        <div>
+            <span class="text-[64px]"
+                >Начни буст своих <br />навыков с
+                <Image src={itamAltImage} alt="ITAM" class="inline-block" />
+                 !
+            </span>
+            <Image src={Arrow} alt="" class="absolute right-[48%] z-0" />
+        </div>
+
+        <div class="flex flex-col gap-5">
+            <div class="bg-sbackground rounded-3xl flex-col p-5">
+                <div class="flex flex-row gap-[18px] items-center">
+                    <span class="text-[40px]">500+</span>
+                    <span class="text-2xl">участников в Хакатон–клубе</span>
+                </div>
+                <div class="flex flex-row gap-[18px] items-center">
+                    <span class="text-[40px]">40+</span>
+                    <span class="text-2xl">побед в хакатонах</span>
+                </div>
+            </div>
+            <div class="flex flex-row gap-4">
+                <Button
+                    set:text="Вступить в клуб"
+                    class="text-2xl login-hide font-medium basis-3/5 text-center register"
+                    id="register1"
+                />
+                <Button
+                    class="login login-hide rounded-ful text-text_main text-center grow text-2xl outline outline-2 outline-text_main py-2 px-3 hover:outline-none"
+                    background="bg-background"
+                    text_class="text-text_description"
+                >
+                    Уже участник
+                </Button>
+            </div>
+        </div>
+        <InfoOrEntry state={State.Info} client:load>
+            <a
+                class="bg-sbackground rounded-3xl p-5 hover:underline gradient_hover z-10 infoh"
+                href="https://telegra.ph/Hakaton-klub-20-sbornye-04-11"
+            >
+                <Image
+                    src={lctImage}
+                    alt="Winners"
+                    class:list="rounded-[30px]"
+                    transition:name={toValidTransitionName("И снова победа!") +
+                        "i"}
+                />
+                <div class="flex flex-row mt-7">
+                    <div class="grow">
+                        <h2
+                            class="text-3xl font-medium"
+                            transition:name={toValidTransitionName(
+                                "И снова победа!",
+                            )}
+                        >
+                            И снова победа!
+                        </h2>
+                        <span
+                            class="text-text_description text-xl font-normal"
+                            transition:name="Поздравляем команду «Лапки МИСИС»"
+                            >Поздравляем команду «Лапки МИСИС»</span
+                        >
+                    </div>
+                    <button
+                        class="bg-background outline outline-2 outline-white rounded-full"
+                    >
+                        <Image
+                            src={arrowRightImage}
+                            alt=""
+                            class="float-right"
+                        />
+                    </button>
+                </div>
+            </a>
+
+            <div class="flex flex-col gap-5 infoh">
+                <div class="grid grid-rows-2 grid-cols-2 gap-5 grow">
+                    {
+                        club_cards.map(([name, desc]) => {
+                            return (
+                                <div class="bg-sbackground noise rounded-3xl w-full h-full p-5">
+                                    <h3 class="text-[32px] font-normal">
+                                        {name}
+                                    </h3>
+                                    <span class="text-text_description text-xl font-normal">
+                                        {desc}
+                                    </span>
+                                </div>
+                            );
+                        })
+                    }
+                </div>
+                <a
+                    class="bg-sbackground text-[32px] font-medium w-full p-5 rounded-[30px] cursor-pointer active:bg-bpress active:bg-none hover:bg-gradient-to-r hover:from-[#A470E5] hover:via-[#6A96ED] hover:to-[#80E1CA]"
+                    href="/scroll/"
+                >
+                    Хакатоны и события
+                </a>
+            </div>
+
+            <div
+                class="infoh border-2 border-[#80E1CA] w-full mt-[42px] rounded-[30px] p-5 flex flex-row text-text_main col-span-2"
+            >
+                <div>
+                    <h2 class="text-[32px] font-medium">
+                        Хочешь участвовать в хакатоне?
+                    </h2>
+                    <span class="text-text_description text-xl font-normal"
+                        >Регистрируйся и отправляй заявку в Cборную!</span
+                    >
+                </div>
+                <div
+                    class="grow flex flex-col flex-wrap content-end text-center"
+                >
+                    <Button
+                        id="registerInfo"
+                        set:text="Регистрация"
+                        class:list="text-[24px] font-medium w-fit"
+                    />
+                    <a
+                        class="text-text_description login-hide underline text-base font-normal hover:text-text_main transition-colors"
+                        href="https://google.com">А что такое Сборная?</a
+                    >
+                </div>
+            </div>
+        </InfoOrEntry>
+    </div>
+</MainLayout>

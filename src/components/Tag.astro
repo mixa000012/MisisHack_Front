@@ -1,0 +1,43 @@
+---
+interface Props {
+    selected: boolean;
+    text: string;
+}
+
+const { selected, text } = Astro.props;
+---
+<style>
+    .fancy:hover {
+        background-image: linear-gradient(
+            to right,
+            rgb(164, 112, 229),
+            rgb(106, 150, 237),
+            rgb(128, 225, 202)
+        );
+        outline: none;
+        color: white;
+        outline-color: white;
+        color: white;
+    }
+    .fancy:active {
+        background-color: rgb(164, 112, 229);
+        outline: 2px solid transparent;
+        outline-offset: 2px;
+        background-image: none;
+        color: white;
+        background-color: white;
+        color: black
+    }
+
+    .fancy:hover.selected {
+        color: black;
+    }
+</style>
+<button
+    class:list={[
+        "rounded-full px-5 fancy transition-colors",
+        selected
+            ? "selected bg-[#FFF] text-text_main2"
+            : "bg-background outline outline-2 text-text_description outline-text_description",
+    ]}>{text}</button
+>
